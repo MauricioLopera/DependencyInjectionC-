@@ -82,6 +82,31 @@ namespace API.Controllers
             return StatusCode(response.StatusCode, response);
         }
 
+        [HttpGet]
+        [Route("{id}/employees")]
+        public IActionResult GetEmployeesByDepartmentId(string id)
+        {
+            StandarResponseDto response;
+            Regex regex = new Regex(@"^\d+$");
+
+            if (!regex.IsMatch(id))
+            {
+                response = new StandarResponseDto
+                {
+                    StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest),
+                    StatusMessage = Messages.Warning,
+                    ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Data = new { Id = "Numeric Only" }
+                };
+
+                return StatusCode(response.StatusCode, response);
+            }
+
+            response = _departmentService.GetEmployeesByDepartmentId(int.Parse(id));
+
+            return StatusCode(response.StatusCode, response);
+        }
+
         [HttpPut]
         [Route("update")]
         public IActionResult Update([FromBody] DepartmentDto data)

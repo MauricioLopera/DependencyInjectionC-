@@ -1,5 +1,6 @@
 ﻿
 using Models.Departments;
+using Models.Dto;
 using Repository.DataContext;
 using Repository.Interfaces;
 
@@ -27,16 +28,28 @@ namespace Repository.Services
             _dbContext.SaveChanges();
         }
 
-        public List<Department> GetAll()
+        public List<DepartmentDto> GetAll()
         {
-            List<Department> departments = _dbContext.Departments.OrderBy(o => o.Id).ToList();
+            List<DepartmentDto> departments = _dbContext.Departments
+                                                                .Select(s => new DepartmentDto
+                                                                {
+                                                                    Id = s.Id,
+                                                                    Name = s.Name
+                                                                })
+                                                                .OrderBy(o => o.Name).ToList();
 
             return departments;
         }
 
-        public Department GetById(int id)
+        public DepartmentDto GetById(int id)
         {
-            Department register = _dbContext.Departments.Where(w => w.Id == id).FirstOrDefault();
+            DepartmentDto register = _dbContext.Departments
+                                                        .Select(s => new DepartmentDto
+                                                        {
+                                                            Id = s.Id,
+                                                            Name = s.Name
+                                                        })
+                                                        .Where(w => w.Id == id).FirstOrDefault();
 
             return register;
         }

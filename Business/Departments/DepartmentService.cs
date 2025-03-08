@@ -85,7 +85,7 @@ namespace Business.Departments
         {
             try
             {
-                List<Department> data = _departmentRepository.GetAll();
+                List<DepartmentDto> data = _departmentRepository.GetAll();
 
                 if(data.Count == 0)
                 {
@@ -122,7 +122,7 @@ namespace Business.Departments
         {
             try
             {
-                Department result = _departmentRepository.GetById(id);
+                DepartmentDto result = _departmentRepository.GetById(id);
 
                 if (result == null)
                 {
@@ -132,6 +132,43 @@ namespace Business.Departments
                         StatusMessage = Messages.NotFound,
                         ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
                         Data = new { }
+                    };
+                }
+
+                return new StandarResponseDto
+                {
+                    StatusCode = Convert.ToInt32(HttpStatusCode.OK),
+                    StatusMessage = Messages.Success,
+                    ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Data = result
+                };
+            }
+            catch (Exception ex)
+            {
+                return new StandarResponseDto()
+                {
+                    StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError),
+                    StatusMessage = Messages.Error,
+                    ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                    Data = new { Message = ex.Message }
+                };
+            }
+        }
+
+        public StandarResponseDto GetEmployeesByDepartmentId(int id)
+        {
+            try
+            {
+                List<EmployeeDto> result = _employeeRepository.GetByDepartment(id);
+
+                if (result.Count == 0)
+                {
+                    return new StandarResponseDto
+                    {
+                        StatusCode = Convert.ToInt32(HttpStatusCode.NotFound),
+                        StatusMessage = Messages.NotFound,
+                        ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Data = new { Result = "There are no emplyees for its department" }
                     };
                 }
 
