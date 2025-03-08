@@ -1,0 +1,11 @@
+﻿################################################################################
+# Este archivo .gitignore ha sido creado automáticamente por Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/Business/bin/Debug/net8.0
+/Docs
+/Models/bin/Debug/net8.0
+/PeriferiaTest/.vs
+/PeriferiaTest/bin/Debug/net8.0
+/Repository/bin/Debug/net8.0
