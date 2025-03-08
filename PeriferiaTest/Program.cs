@@ -1,4 +1,5 @@
 using Business.Departments;
+using Business.Employees;
 using Microsoft.EntityFrameworkCore;
 using Repository.DataContext;
 using Repository.Interfaces;
@@ -12,6 +13,7 @@ builder.Services.AddDbContext<PeriferiaTestContext>(x => x.UseSqlServer(builder.
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

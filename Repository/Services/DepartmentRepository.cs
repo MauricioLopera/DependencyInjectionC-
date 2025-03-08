@@ -41,6 +41,13 @@ namespace Repository.Services
             return register;
         }
 
+        public Department GetIdByName(string name)
+        {
+            Department register = _dbContext.Departments.Where(w => w.Name == name).FirstOrDefault();
+
+            return register;
+        }
+
         public void Update(Department department)
         {
             var reg = _dbContext.Departments.Where(w => w.Id == department.Id).FirstOrDefault();

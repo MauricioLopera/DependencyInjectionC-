@@ -32,3 +32,4 @@ C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Repository\
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Repository\obj\Debug\net8.0\Repository.pdb
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Repository\obj\Debug\net8.0\Repository.genruntimeconfig.cache
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Repository\obj\Debug\net8.0\ref\Repository.dll
+C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Repository\obj\Debug\net8.0\Repository.sourcelink.json

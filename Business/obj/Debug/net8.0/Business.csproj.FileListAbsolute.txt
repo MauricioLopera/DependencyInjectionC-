@@ -32,3 +32,4 @@ C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Business\ob
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Business\obj\Debug\net8.0\refint\Business.dll
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Business\obj\Debug\net8.0\Business.pdb
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Business\obj\Debug\net8.0\ref\Business.dll
+C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Business\obj\Debug\net8.0\Business.sourcelink.json

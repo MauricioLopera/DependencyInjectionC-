@@ -20,3 +20,4 @@ C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Models\obj\
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Models\obj\Debug\net8.0\refint\Models.dll
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Models\obj\Debug\net8.0\Models.pdb
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Models\obj\Debug\net8.0\ref\Models.dll
+C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\Models\obj\Debug\net8.0\Models.sourcelink.json

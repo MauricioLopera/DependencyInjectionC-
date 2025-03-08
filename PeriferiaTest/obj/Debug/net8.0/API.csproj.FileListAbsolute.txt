@@ -182,3 +182,4 @@ C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\PeriferiaTe
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\PeriferiaTest\obj\Debug\net8.0\API.pdb
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\PeriferiaTest\obj\Debug\net8.0\API.genruntimeconfig.cache
 C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\PeriferiaTest\obj\Debug\net8.0\ref\API.dll
+C:\Users\mauri\OneDrive\Documentos\Datos_PC\C#\DependencyInjectionC-\PeriferiaTest\obj\Debug\net8.0\API.sourcelink.json

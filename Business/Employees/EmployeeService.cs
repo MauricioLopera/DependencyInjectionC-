@@ -2,27 +2,77 @@
 using Models.Constants;
 using Models.Departments;
 using Models.Dto;
+using Models.Employees;
+using Models.Enums;
 using Repository.Interfaces;
 using System.Net;
 
-namespace Business.Departments
+namespace Business.Employees
 {
-    public class DepartmentService : IDepartmentService
+    public class EmployeeService : IEmployeeService
     {
-        private readonly IDepartmentRepository _departmentRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IDepartmentRepository _departmentRepository;
 
-        public DepartmentService(IDepartmentRepository departmentRepository, IEmployeeRepository employeeRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
-            _departmentRepository = departmentRepository;
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
 
-        public StandarResponseDto Create(Department department)
+        public StandarResponseDto Create(EmployeeDto employee)
         {
             try
             {
-                _departmentRepository.Create(department);
+                int jobPositionId = (int)(JobPosition)Enum.Parse(typeof(JobPosition), employee.JobPositionName, true);
+              
+                if (jobPositionId == 0)
+                {
+                    return new StandarResponseDto
+                    {
+                        StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest),
+                        StatusMessage = Messages.Invalid,
+                        ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Data = new { JobPosition = "Invalid value"}
+                    };
+                }
+
+                Department department = _departmentRepository.GetIdByName(employee.Department);
+
+                if (department == null)
+                {
+                    return new StandarResponseDto
+                    {
+                        StatusCode = Convert.ToInt32(HttpStatusCode.NotFound),
+                        StatusMessage = Messages.NotFound,
+                        ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Data = new { Result = "Invalid DepartmentId" }
+                    };
+                }
+
+                if (_employeeRepository.GetByDni(employee.Dni) != null)
+                {
+                    return new StandarResponseDto
+                    {
+                        StatusCode = Convert.ToInt32(HttpStatusCode.Forbidden),
+                        StatusMessage = Messages.Exist,
+                        ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Data = new { Result = "Employee already exists" }
+                    };
+                }
+
+                Employee reg = new Employee
+                {
+                    Dni = employee.Dni,
+                    Name = employee.Name,
+                    LastName = employee.LastName,
+                    Email = employee.Email,
+                    Salary = Convert.ToDecimal(employee.Salary),
+                    DepartmentId = department.Id,
+                    JobPositionId = jobPositionId
+                };
+
+                _employeeRepository.Create(reg);
 
                 return new StandarResponseDto
                 {
@@ -39,34 +89,28 @@ namespace Business.Departments
                     StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError),
                     StatusMessage = Messages.Error,
                     ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                    Data = new {Message = ex.Message}
+                    Data = new { Message = ex.Message }
                 };
             }
         }
 
-        public StandarResponseDto Delete(Department department)
+        public StandarResponseDto Delete(EmployeeDto employee)
         {
             try
             {
-                if(_employeeRepository.GetByDepartment(department.Id).Count > 0)
+                Employee reg = new Employee
                 {
-                    return new StandarResponseDto
-                    {
-                        StatusCode = Convert.ToInt32(HttpStatusCode.Forbidden),
-                        StatusMessage = Messages.Exist,
-                        ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        Data = new { Result = "There are some employees asociated to this department"}
-                    };
-                }
+                    Id = Convert.ToInt32(employee.Id)
+                };
 
-                _departmentRepository.Delete(department);
+                _employeeRepository.Delete(reg);
 
                 return new StandarResponseDto
                 {
                     StatusCode = Convert.ToInt32(HttpStatusCode.OK),
                     StatusMessage = Messages.Success,
                     ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                    Data = new { Deleted = "True" }
+                    Data = new { Created = "True" }
                 };
             }
             catch (Exception ex)
@@ -85,16 +129,16 @@ namespace Business.Departments
         {
             try
             {
-                List<Department> data = _departmentRepository.GetAll();
+                List<EmployeeDto> data = _employeeRepository.GetAll();
 
-                if(data.Count == 0)
+                if (data.Count == 0)
                 {
                     return new StandarResponseDto
                     {
                         StatusCode = Convert.ToInt32(HttpStatusCode.NotFound),
                         StatusMessage = Messages.NotFound,
                         ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        Data = new {}
+                        Data = new { }
                     };
                 }
 
@@ -122,7 +166,7 @@ namespace Business.Departments
         {
             try
             {
-                Department result = _departmentRepository.GetById(id);
+                EmployeeDto result = _employeeRepository.GetById(id);
 
                 if (result == null)
                 {
@@ -155,22 +199,49 @@ namespace Business.Departments
             }
         }
 
-        public StandarResponseDto Update(Department department)
+        public StandarResponseDto Update(EmployeeDto employee)
         {
             try
             {
-                if (_departmentRepository.GetById(department.Id) == null)
+                int jobPositionId = (int)(JobPosition)Enum.Parse(typeof(JobPosition), employee.JobPositionName, true);
+
+                if (jobPositionId == 0)
+                {
+                    return new StandarResponseDto
+                    {
+                        StatusCode = Convert.ToInt32(HttpStatusCode.BadRequest),
+                        StatusMessage = Messages.Invalid,
+                        ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                        Data = new { JobPosition = "Invalid value" }
+                    };
+                }
+
+                Department department = _departmentRepository.GetIdByName(employee.Department);
+
+                if (department == null)
                 {
                     return new StandarResponseDto
                     {
                         StatusCode = Convert.ToInt32(HttpStatusCode.NotFound),
                         StatusMessage = Messages.NotFound,
                         ProcessDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                        Data = new { Result = "No datum to update"}
+                        Data = new { Result = "Invalid DepartmentId" }
                     };
                 }
 
-                _departmentRepository.Update(department);
+                Employee reg = new Employee
+                {
+                    Id = Convert.ToInt32(employee.Id),
+                    Dni = employee.Dni,
+                    Name = employee.Name,
+                    LastName = employee.LastName,
+                    Email = employee.Email,
+                    Salary = Convert.ToDecimal(employee.Salary),
+                    DepartmentId = department.Id,
+                    JobPositionId = jobPositionId
+                };
+
+                _employeeRepository.Update(reg);
 
                 return new StandarResponseDto
                 {

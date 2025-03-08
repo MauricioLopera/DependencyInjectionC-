@@ -1,5 +1,7 @@
 ﻿
+using Models.Dto;
 using Models.Employees;
+using Models.Enums;
 using Repository.DataContext;
 using Repository.Interfaces;
 
@@ -14,30 +16,108 @@ namespace Repository.Services
             _dbContext = dbContext;
         }
 
-        public async Task Create(Employee employee)
+        public void Create(Employee employee)
         {
-            await _dbContext.Employees.AddAsync(employee);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Employees.AddAsync(employee);
+            _dbContext.SaveChangesAsync();
         }
 
-        public Task DeleteById(int id)
+        public void Delete(Employee employee)
         {
-            throw new NotImplementedException();
+            var reg = _dbContext.Employees.Where(w => w.Id == employee.Id).FirstOrDefault();
+            _dbContext.Employees.Remove(reg);
+            _dbContext.SaveChanges();
         }
 
-        public Task<List<Employee>> GetAll()
+        public List<EmployeeDto> GetAll()
         {
-            throw new NotImplementedException();
+            List<EmployeeDto> employees = _dbContext.Employees
+                                                    .Join(_dbContext.Departments, employee => employee.DepartmentId, department => department.Id, (employee, department) => new EmployeeDto
+                                                    {
+                                                        Id = employee.Id,
+                                                        Dni = employee.Dni,
+                                                        Name = employee.Name,
+                                                        LastName = employee.LastName,
+                                                        Email = employee.Email,
+                                                        Salary = employee.Salary,
+                                                        Department = department.Name,
+                                                        JobPositionName = ((JobPosition)employee.JobPositionId).ToString()
+                                                    })
+                                                    .OrderBy(o => o.Name).ToList();
+
+            return employees;
         }
 
-        public Task<Employee> GetById(int id)
+        public EmployeeDto GetById(int id)
         {
-            throw new NotImplementedException();
+            EmployeeDto employee = _dbContext.Employees
+                                                    .Join(_dbContext.Departments, employee => employee.DepartmentId, department => department.Id, (employee, department) => new EmployeeDto
+                                                    {
+                                                        Id = employee.Id,
+                                                        Dni = employee.Dni,
+                                                        Name = employee.Name,
+                                                        LastName = employee.LastName,
+                                                        Email = employee.Email,
+                                                        Salary = employee.Salary,
+                                                        Department = department.Name,
+                                                        JobPositionName = ((JobPosition)employee.JobPositionId).ToString()
+                                                    })
+                                                    .Where(w => Convert.ToInt32(w.Id) == id).FirstOrDefault();
+
+            return employee;
         }
 
-        public Task Update(Employee employee)
+        public EmployeeDto GetByDni(string dni)
         {
-            throw new NotImplementedException();
+            EmployeeDto employee = _dbContext.Employees
+                                                    .Join(_dbContext.Departments, employee => employee.DepartmentId, department => department.Id, (employee, department) => new EmployeeDto
+                                                    {
+                                                        Id = employee.Id,
+                                                        Dni = employee.Dni,
+                                                        Name = employee.Name,
+                                                        LastName = employee.LastName,
+                                                        Email = employee.Email,
+                                                        Salary = employee.Salary,
+                                                        Department = department.Name,
+                                                        JobPositionName = ((JobPosition)employee.JobPositionId).ToString()
+                                                    })
+                                                    .Where(w => w.Dni == dni).FirstOrDefault();
+
+            return employee;
+        }
+
+        public List<EmployeeDto> GetByDepartment(int id)
+        {
+            List<EmployeeDto> employee = _dbContext.Employees
+                                                    .Where(w => w.DepartmentId == id)
+                                                    .Join(_dbContext.Departments, employee => employee.DepartmentId, department => department.Id, (employee, department) => new EmployeeDto
+                                                    {
+                                                        Id = employee.Id,
+                                                        Dni = employee.Dni,
+                                                        Name = employee.Name,
+                                                        LastName = employee.LastName,
+                                                        Email = employee.Email,
+                                                        Salary = employee.Salary,
+                                                        Department = department.Name,
+                                                        JobPositionName = ((JobPosition)employee.JobPositionId).ToString()
+                                                    })
+                                                    .ToList();
+
+            return employee;
+        }
+
+        public void Update(Employee employee)
+        {
+            var reg = _dbContext.Employees.Where(w => w.Id == employee.Id).FirstOrDefault();
+            reg.Dni = employee.Dni;
+            reg.Name = employee.Name;
+            reg.LastName = employee.LastName;
+            reg.Email = employee.Email;
+            reg.Salary = employee.Salary;
+            reg.DepartmentId = employee.DepartmentId;
+            reg.JobPositionId = employee.JobPositionId;
+
+            _dbContext.SaveChanges();
         }
     }
 }
